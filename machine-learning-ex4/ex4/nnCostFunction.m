@@ -62,8 +62,47 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+%h = sigmoid([ones(length(X),1),(sigmoid(Theta1*X'))']*Theta2');
 
+X = [ones(length(X),1) , X];
 
+t = [];
+
+for i = 1:length(y)
+  if (y(i) == 1)
+    t = [t;1,0,0,0,0,0,0,0,0,0];
+  elseif (y(i) == 2)
+    t = [t;0,1,0,0,0,0,0,0,0,0];
+  elseif (y(i) == 3)
+    t = [t;0,0,1,0,0,0,0,0,0,0];
+  elseif (y(i) == 4)
+    t = [t;0,0,0,1,0,0,0,0,0,0];
+  elseif (y(i) == 5)
+    t = [t;0,0,0,0,1,0,0,0,0,0];
+  elseif (y(i) == 6)
+    t = [t;0,0,0,0,0,1,0,0,0,0];
+  elseif (y(i) == 7)
+    t = [t;0,0,0,0,0,0,1,0,0,0];
+  elseif (y(i) == 8)
+    t = [t;0,0,0,0,0,0,0,1,0,0];
+  elseif (y(i) == 9)
+    t = [t;0,0,0,0,0,0,0,0,1,0];
+  elseif (y(i) == 10)
+    t = [t;0,0,0,0,0,0,0,0,0,1];
+  end
+end
+a1 = X;
+z2 = X*Theta1';
+a2 = [ones(length(z2),1) sigmoid(z2)];
+z3 = a2*Theta2';
+a3 = sigmoid(z3);
+h = a3;
+
+y = t;
+
+p = sum(sum(Theta1(:, 2:end).^2 ,1) ,2)+sum(sum(Theta2(:, 2:end).^2 ,1) ,2);
+
+J = sum(sum((-y).*log(h) - (1-y).*log(1-h), 2))/m + lambda*p/(2*m);
 
 
 
