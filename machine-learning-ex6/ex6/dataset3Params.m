@@ -23,11 +23,25 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+possible_c = [0.01 0.03 0.1 0.3 1 3 10 30] ;
+possible_sigma = [0.01 0.03 0.1 0.3 1 3 10 30] ;
 
+prediction_error = 10000;
 
-
-
-
+for ci = 1:length(possible_c)
+  local_c = possible_c(ci);
+  for sig = 1 : length(possible_sigma)
+    local_sig = possible_sigma(sig)
+    model= svmTrain(X, y, local_c, @(x1, x2) gaussianKernel(x1, x2, local_sig));
+    predictions = svmPredict(model, Xval);
+    err = mean(double(predictions ~= yval));
+    if err < prediction_error
+      prediction_error = err;
+      C = local_c;
+      sigma = local_sig;
+    end
+  end  
+end
 
 % =========================================================================
 
